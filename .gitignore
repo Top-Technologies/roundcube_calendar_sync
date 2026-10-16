@@ -1,0 +1,10 @@
+pycache/
+*.py[cod]
+*.log
+.env
+.venv/
+venv/
+*.zip
+*.backup
+*.dump
+*.sql

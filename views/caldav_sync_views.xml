@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_caldav_sync_config_list" model="ir.ui.view">
+        <field name="name">caldav.sync.config.list</field>
+        <field name="model">caldav.sync.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="server_url"/>
+                <field name="username"/>
+                <field name="active"/>
+                <field name="last_sync"/>
+                <field name="last_status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_caldav_sync_config_form" model="ir.ui.view">
+        <field name="name">caldav.sync.config.form</field>
+        <field name="model">caldav.sync.config</field>
+        <field name="arch" type="xml">
+            <form string="CalDAV Calendar Connection">
+                <header>
+                    <button name="action_test_connection" type="object" string="Test Connection" class="btn-secondary"/>
+                    <button name="action_sync_now" type="object" string="Sync Now" class="oe_highlight"/>
+                    <field name="last_status" widget="statusbar" statusbar_visible="never,success,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="My cPanel Calendar"/></h1>
+                    </div>
+                    <group>
+                        <group string="Connection">
+                            <field name="user_id" readonly="1"/>
+                            <field name="active"/>
+                            <field name="server_url" placeholder="https://mail.example.com:2080"/>
+                            <field name="calendar_url" placeholder="https://mail.example.com:2080/calendars/user@example.com/calendar/"/>
+                            <field name="username"/>
+                            <field name="password" password="True"/>
+                            <field name="sync_interval_minutes"/>
+                        </group>
+                        <group string="Status">
+                            <field name="last_sync"/>
+                            <field name="last_message" readonly="1"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        This connection belongs to the current Odoo user. Use your own cPanel/Webmail credentials.
+                        Do not enter another employee's password. Start with a test calendar and review the README
+                        before enabling synchronization on a live calendar.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_caldav_sync_config" model="ir.actions.act_window">
+        <field name="name">CalDAV Calendar Sync</field>
+        <field name="res_model">caldav.sync.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Place the sync entry inside Odoo's existing Calendar app menu, not as a separate app. -->
+    <menuitem id="menu_caldav_sync_config" name="Sync with cPanel"
+              parent="calendar.mail_menu_calendar"
+              action="action_caldav_sync_config" sequence="90"
+              groups="base.group_user"/>
+</odoo>
